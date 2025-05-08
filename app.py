@@ -50,7 +50,7 @@ features = ['in_deezer_charts','in_spotify_charts',
 
 
 # Best-case scenario input for testing
-features2 = {
+features_best_case = {
     'in_deezer_charts': 1,
     'in_spotify_charts': 1,
     'in_apple_charts': 1,
