@@ -14,8 +14,8 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 
 warnings.filterwarnings('ignore')
 
-if(os.getcwd() != '../dataset/'):
-    os.chdir('../dataset')
+if(os.getcwd() != './dataset/'):
+    os.chdir('./dataset')
 print(os.getcwd())
 
 df = pd.read_csv('spotify-2023.csv',on_bad_lines = 'warn', encoding='latin1')
@@ -45,6 +45,9 @@ with open('../model/test_X.pkl','wb') as file:
     pickle.dump(test_X, file)
 with open('../model/test_y.pkl','wb') as file:
     pickle.dump(test_y,file)
+
+with open('../model/scaler.pkl','wb') as file:
+    pickle.dump(scaler,file)
 
 rf_params = {
     'n_estimators': [100, 200],
@@ -81,9 +84,43 @@ r2_grad = r2_score(test_y, y_pred_grad)
 print(f'\nR^2 Score Gradient: {r2_grad:.2f}')
 print(f'RMSE Error Gradient: {np.sqrt(mean_squared_error(test_y, y_pred_grad)):.2f}')
 
-
+# Plot for Random Forest Model
 plt.figure(figsize=(10,6))
-plt.plot([min(test_y), max(test_y)], [min()])
+plt.scatter(test_y, y_pred, alpha = 0.7, edgecolor='k',label = 'Predicted vs Actual')
+plt.plot([min(test_y), max(test_y)], [min(y_pred), max(y_pred)],'r--',label = 'Perfect Prediction')
+
+plt.xlabel("Actual Data")
+plt.ylabel("Predicted Data")
+plt.title(f"Random Forest Regression Model Prediction\n$R^2 Score of the model: {r2_forest:.4f}$", fontsize=14)
+
+formatter = ticker.FuncFormatter(lambda x, _:f'{x*1e-9:.2f}B')
+plt.gca().xaxis.set_major_formatter(formatter)
+plt.gca().yaxis.set_major_formatter(formatter)
+
+plt.grid(True,linestyle='--',alpha=0.5)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+
+# Plot for Gradient Boosting Model
+plt.figure(figsize=(10,6))
+plt.scatter(test_y, y_pred_grad, alpha = 0.7, edgecolor='k',label = 'Predicted vs Actual')
+plt.plot([min(test_y), max(test_y)], [min(y_pred), max(y_pred)],'r--',label = 'Perfect Prediction')
+
+plt.xlabel("Actual Data")
+plt.ylabel("Predicted Data")
+plt.title(f"Gradient Boosting Regression Model Prediction\n$R^2 Score of the model: {r2_grad:.4f}$", fontsize=14)
+
+formatter = ticker.FuncFormatter(lambda x, _:f'{x*1e-9:.2f}B')
+plt.gca().xaxis.set_major_formatter(formatter)
+plt.gca().yaxis.set_major_formatter(formatter)
+
+plt.grid(True,linestyle='--',alpha=0.5)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
 # Plot Feature Importance of the Random Forest Model
 best_estimator_forest = model_grid.best_estimator_
 

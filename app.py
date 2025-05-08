@@ -6,8 +6,8 @@ import streamlit as st
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import r2_score
 
-if(os.getcwd() != '../model'):
-    os.chdir('../model')
+if(os.getcwd() != './model'):
+    os.chdir('./model')
 print(os.getcwd())
 
 with open('spotify_2023_random_forest.pkl','rb') as file:
@@ -21,6 +21,9 @@ with open('test_X.pkl','rb') as file:
 
 with open('test_y.pkl','rb') as file:
     y_test = pickle.load(file)
+
+with open('scaler.pkl','rb') as file:
+    scaler = pickle.load(file)
 
 def load_data():
     return pd.read_csv('../dataset/spotify-2023.csv',on_bad_lines = 'warn', encoding='latin1')
@@ -80,11 +83,12 @@ st.markdown("Those are the model's performance graphs. It can looks like there a
 
 col3, col4 = st.columns(2)
 with col3:
-    st.image('plt_gradient_boosting_spotify_2023.png',caption='Gradient Boosting Model', use_container_width=True)
+    st.image('plt_gradient_boosting_model.png',caption='Gradient Boosting Model', use_container_width=True)
 with col4:
-    st.image('plt_random_forest_spotify_2023.png',caption='Random Forest Model', use_container_width=True)
+    st.image('plt_random_forest_model.png',caption='Random Forest Model', use_container_width=True)
 
-
+print(type(x_test))
+#x_test = pd.DataFrame(scaler.fit_transform(x_test), columns=feature_name)
 
 y_pred_forest = model_forest.predict(x_test)
 r2_forest = r2_score(y_test, y_pred_forest)
