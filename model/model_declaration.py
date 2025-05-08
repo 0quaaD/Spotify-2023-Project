@@ -66,8 +66,8 @@ model = RandomForestRegressor(n_estimators = 2000, max_depth = 100, n_jobs = 12)
 model_grid = GridSearchCV(model, rf_params, scoring = rmse_scorer, cv=5, n_jobs=-1, verbose=1)
 model_grid.fit(train_X, train_y)
 y_pred = model_grid.predict(test_X)
-r2 = r2_score(test_y, y_pred)
-print(f'\nR^2 Score Random Forest: {r2:.2f}')
+r2_forest = r2_score(test_y, y_pred)
+print(f'\nR^2 Score Random Forest: {r2_forest:.2f}')
 print(f'RMSE Error Random Forest: {np.sqrt(mean_squared_error(test_y, y_pred)):.2f}')
 
 # ---------------------
@@ -77,26 +77,13 @@ model_grad_grid.fit(train_X, train_y)
 
 y_pred_grad = model_grad_grid.predict(test_X)
 
-r2 = r2_score(test_y, y_pred_grad)
-print(f'\nR^2 Score Gradient: {r2:.2f}')
+r2_grad = r2_score(test_y, y_pred_grad)
+print(f'\nR^2 Score Gradient: {r2_grad:.2f}')
 print(f'RMSE Error Gradient: {np.sqrt(mean_squared_error(test_y, y_pred_grad)):.2f}')
 
-# Plot for Random Regressor
-sns.scatterplot(x = test_y, y = y_pred)
-plt.plot([test_y.min(), test_y.max()], [y_pred.min(), y_pred.max()], 'r--')
-plt.xlabel('Actual data')
-plt.ylabel('Predicted data')
-plt.title('Plot for Random Regressor')
-plt.show()
 
-# Plot for Gradient Boosting
-sns.scatterplot(x = test_y, y = y_pred_grad)
-plt.plot([test_y.min(), test_y.max()], [y_pred_grad.min(), y_pred_grad.max()], 'r--')
-plt.xlabel('Actual data')
-plt.ylabel('Predicted data')
-plt.title('Plot for Gradient Boosting')
-plt.show()
-
+plt.figure(figsize=(10,6))
+plt.plot([min(test_y), max(test_y)], [min()])
 # Plot Feature Importance of the Random Forest Model
 best_estimator_forest = model_grid.best_estimator_
 
