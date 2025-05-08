@@ -19,9 +19,6 @@ with open('./model/test_X.pkl','rb') as file:
 with open('./model/test_y.pkl','rb') as file:
     y_test = pickle.load(file)
 
-with open('./model/scaler.pkl','rb') as file:
-    scaler = pickle.load(file)
-
 def load_data():
     return pd.read_csv('./dataset/spotify-2023.csv',on_bad_lines = 'warn', encoding='latin1')
 def format_streams(n):
@@ -44,6 +41,7 @@ if st.checkbox("The Entire Dataset"):
     st.write(data.head(10))
 
 st.write("🎶 Popularity Prediction")
+
 features = ['in_deezer_charts','in_spotify_charts',
          'in_apple_charts','in_deezer_playlists',
          'in_apple_playlists','in_spotify_playlists']
@@ -58,7 +56,6 @@ features_best_case = {
     'in_apple_playlists': 1,
     'in_spotify_playlists': 1
 }
-input_df_ = pd.DataFrame([features])
 user_input = {feature: st.slider(feature, float(data[feature].min()), float(data[feature].max())) for feature in features}
 input_df = pd.DataFrame([user_input])
 
