@@ -6,27 +6,24 @@ import streamlit as st
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import r2_score
 
-if(os.getcwd() != './model'):
-    os.chdir('./model')
-print(os.getcwd())
 
-with open('spotify_2023_random_forest.pkl','rb') as file:
+with open('./model/spotify_2023_random_forest.pkl','rb') as file:
     model_forest = pickle.load(file)
 
-with open('spotify_2023_gradient_boosting.pkl','rb') as file:
+with open('./model/spotify_2023_gradient_boosting.pkl','rb') as file:
     model_gradient = pickle.load(file)
 
-with open('test_X.pkl','rb') as file:
+with open('./model/test_X.pkl','rb') as file:
     x_test = pickle.load(file)
 
-with open('test_y.pkl','rb') as file:
+with open('./model/test_y.pkl','rb') as file:
     y_test = pickle.load(file)
 
-with open('scaler.pkl','rb') as file:
+with open('./model/scaler.pkl','rb') as file:
     scaler = pickle.load(file)
 
 def load_data():
-    return pd.read_csv('../dataset/spotify-2023.csv',on_bad_lines = 'warn', encoding='latin1')
+    return pd.read_csv('./dataset/spotify-2023.csv',on_bad_lines = 'warn', encoding='latin1')
 def format_streams(n):
     if(n >= 1e+9):
         return f"{n / 1e+9:.2f}B"
@@ -47,13 +44,12 @@ if st.checkbox("The Entire Dataset"):
     st.write(data.head(10))
 
 st.write("🎶 Popularity Prediction")
-features1 = ['danceability_%', 'energy_%', 'acousticness_%', 'instrumentalness_%', 'liveness_%', 'valence_%']  # Adjust to your model
 features = ['in_deezer_charts','in_spotify_charts',
          'in_apple_charts','in_deezer_playlists',
          'in_apple_playlists','in_spotify_playlists']
 
 
-# Best-case scenario input
+# Best-case scenario input for testing
 features2 = {
     'in_deezer_charts': 1,
     'in_spotify_charts': 1,
@@ -83,25 +79,26 @@ st.markdown("Those are the model's performance graphs. It can looks like there a
 
 col3, col4 = st.columns(2)
 with col3:
-    st.image('plt_gradient_boosting_model.png',caption='Gradient Boosting Model', use_container_width=True)
+    st.image('./model/plt_gradient_boosting_model.png',caption='Gradient Boosting Model', use_container_width=True)
 with col4:
-    st.image('plt_random_forest_model.png',caption='Random Forest Model', use_container_width=True)
+    st.image('./model/plt_random_forest_model.png',caption='Random Forest Model', use_container_width=True)
 
-print(type(x_test))
-#x_test = pd.DataFrame(scaler.fit_transform(x_test), columns=feature_name)
-
-y_pred_forest = model_forest.predict(x_test)
-r2_forest = r2_score(y_test, y_pred_forest)
-
-y_pred_grad = model_gradient.predict(x_test)
-r2_grad = r2_score(y_test, y_pred_grad)
-
-st.write(f"\n*$R^2$ Score of the Random Forest Model: {r2_forest:.4f}")
-st.write(f"\n*$R^2$ Score of the Gradient Boosting Model: {r2_grad:.4f}")
 
 st.markdown("As you can see, the Gradient Boosting model performed better than the Random Forest model which it tells us that Gradient Boosting method is way better for our model with the given data.")
 col5, col6 = st.columns(2)
 with col5:
-    st.image('plt_random_forest_importance_bar_plot.png',caption='Random Forest Feature Importance Plot')
+    st.image('./model/plt_random_forest_importance_bar_plot.png',caption='Random Forest Feature Importance Plot')
 with col6:
-    st.image('plt_grad_boost_feature_importance.png', caption='Gradient Boosting Feature Importance Plot')
+    st.image('./model/plt_grad_boost_feature_importance.png', caption='Gradient Boosting Feature Importance Plot')
+
+st.markdown("If you take a look at closely to the both Feature Importance plots, you would see that there are no difference between the models what they needed for training and testing.")
+
+st.header("🏁 Conclusion")
+st.markdown("""**In this project, we explored a huge dataset of Spotify's hit songs of 2023 and attempted to forecast their popularity based on features of different music platforms and audio features. We have trained and tested two ensemble models — Random Forest and Gradient Boosting — to evaluate their prediction abilities.
+
+The results showed that the Gradient Boosting model outperformed the Random Forest model with a higher R2R2 value of 0.8679 compared to 0.8377. This indicates that Gradient Boosting was superior at capturing the complex relationships within the dataset.
+
+Both models are trained on identical feature sets and so it was reasonable to make the comparison. Feature importance plots also provide insight into which fields (e.g., playlist status and platform charts) are playing most significant roles towards making the song popular. 
+
+Lesson: In this case, Gradient Boosting is a better method than predicting song popularity, and perhaps could be optimised or worked further upon in the future with improved performance.**""")
+

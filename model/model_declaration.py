@@ -91,7 +91,7 @@ plt.plot([min(test_y), max(test_y)], [min(y_pred), max(y_pred)],'r--',label = 'P
 
 plt.xlabel("Actual Data")
 plt.ylabel("Predicted Data")
-plt.title(f"Random Forest Regression Model Prediction\n$R^2 Score of the model: {r2_forest:.4f}$", fontsize=14)
+plt.title(f"Random Forest Regression Model Prediction\n$R^2$ Score of the model: {r2_forest:.4f}", fontsize=14)
 
 formatter = ticker.FuncFormatter(lambda x, _:f'{x*1e-9:.2f}B')
 plt.gca().xaxis.set_major_formatter(formatter)
@@ -110,7 +110,7 @@ plt.plot([min(test_y), max(test_y)], [min(y_pred), max(y_pred)],'r--',label = 'P
 
 plt.xlabel("Actual Data")
 plt.ylabel("Predicted Data")
-plt.title(f"Gradient Boosting Regression Model Prediction\n$R^2 Score of the model: {r2_grad:.4f}$", fontsize=14)
+plt.title(f"Gradient Boosting Regression Model Prediction\n$R^2$ Score of the model: {r2_grad:.4f}", fontsize=14)
 
 formatter = ticker.FuncFormatter(lambda x, _:f'{x*1e-9:.2f}B')
 plt.gca().xaxis.set_major_formatter(formatter)
@@ -131,7 +131,7 @@ sns.barplot(data=imp_df_forest,x='Importance',y='Feature')
 plt.title('Feature Importance of the Random Forest Model')
 plt.show()
 
-# plot Feature Importance of the Gradient Boosting model
+# Plot Feature Importance of the Gradient Boosting model
 best_estimators_grad = model_grad_grid.best_estimator_
 imp = best_estimators_grad.feature_importances_
 imp_df_grad = pd.DataFrame({'Feature':feature_names, 'Importance': imp}).sort_values(by='Importance',ascending=False)
