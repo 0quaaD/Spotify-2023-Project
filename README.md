@@ -104,7 +104,7 @@ python3 -m venv myenv
   ```
 **4.** : Install the required tools, libraries
 ```
-pip install -r requirements.tt
+pip install -r requirements.txt
 ```
 
 ## Usage
